@@ -1,0 +1,208 @@
+:host {
+  display: block;
+  color: #f5f2ed;
+  font-family: "Manrope", sans-serif;
+}
+
+.nosotros {
+  box-sizing: border-box;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 4rem);
+  background: #14100d;
+}
+
+.nosotros__content {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.nosotros__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.nosotros__header {
+  margin-bottom: 1.5rem;
+}
+
+.nosotros__eyebrow {
+  margin: 0 0 0.6rem;
+  color: #d4a373;
+  font-size: 0.76rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.nosotros__title {
+  margin: 0;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: #f5f2ed;
+  text-wrap: balance;
+}
+
+.nosotros__description {
+  margin: 0 0 2rem;
+  color: rgb(245 242 237 / 75%);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.nosotros__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nosotros__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.nosotros__item-label {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #c88a4b;
+  line-height: 1.4;
+}
+
+.nosotros__item-value {
+  color: rgb(245 242 237 / 85%);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.nosotros__item-value:hover {
+  color: #d4a373;
+}
+
+.nosotros__horarios {
+  background: #1f1814;
+  padding: 1.75rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgb(245 242 237 / 8%);
+}
+
+.nosotros__horarios-title {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #d4a373;
+}
+
+.nosotros__horarios-list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nosotros__horario-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.nosotros__horario-item dt {
+  margin: 0;
+  color: rgb(245 242 237 / 70%);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.nosotros__horario-item dd {
+  margin: 0;
+  color: #f5f2ed;
+  font-size: 0.9rem;
+}
+
+.nosotros__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nosotros__gallery-title {
+  margin: 0;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f5f2ed;
+}
+
+.nosotros__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.nosotros__gallery-item {
+  margin: 0;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+
+.nosotros__gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 350ms ease;
+}
+
+.nosotros__gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.nosotros__gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.75rem;
+  background: linear-gradient(transparent, rgba(20, 16, 13, 0.85));
+  color: #f5f2ed;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .nosotros__grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .nosotros__gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nosotros__gallery-item {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nosotros__gallery-item img {
+    transition: none;
+  }
+}

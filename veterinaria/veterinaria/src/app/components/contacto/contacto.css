@@ -1,0 +1,218 @@
+:host {
+  display: block;
+  color: #f5f2ed;
+  font-family: "Manrope", sans-serif;
+}
+
+.contact {
+  box-sizing: border-box;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 4rem);
+  background: #14100d;
+}
+
+.contact__container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.contact__header {
+  max-width: 42rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.contact__eyebrow {
+  margin: 0 0 0.6rem;
+  color: #d4a373;
+  font-size: 0.76rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.contact__title {
+  margin: 0;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: #f5f2ed;
+}
+
+.contact__intro {
+  margin: 1rem 0 0;
+  color: rgb(245 242 237 / 70%);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contact__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.contact__form,
+.contact__details {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid rgb(245 242 237 / 10%);
+  border-radius: 1.75rem;
+  background: #1f1814;
+  box-shadow: 0 8px 28px rgb(0 0 0 / 20%);
+}
+
+.contact__form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.contact__field {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+}
+
+.contact__field label {
+  color: #f5f2ed;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.contact__field input,
+.contact__field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.4rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgb(245 242 237 / 15%);
+  border-radius: 0.9rem;
+  background: #14100d;
+  color: #f5f2ed;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.contact__field textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.contact__field input:focus,
+.contact__field textarea:focus {
+  border-color: #d4a373;
+  outline: 2px solid #d4a37333;
+}
+
+.contact__field input[aria-invalid="true"],
+.contact__field textarea[aria-invalid="true"] {
+  border-color: #e89c6b;
+}
+
+.contact__error {
+  margin: 0;
+  color: #e89c6b;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.contact__submit {
+  display: flex;
+  min-height: 3.4rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #d4a373;
+  border-radius: 0.9rem;
+  background: transparent;
+  color: #d4a373;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.contact__submit:hover:not(:disabled) {
+  background: #d4a373;
+  color: #14100d;
+  transform: translateY(-1px);
+}
+
+.contact__submit:focus-visible {
+  outline: 3px solid #d4a373;
+  outline-offset: 3px;
+}
+
+.contact__submit:disabled {
+  background: rgb(245 242 237 / 12%);
+  color: rgb(245 242 237 / 45%);
+  cursor: not-allowed;
+}
+
+.contact__success {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid #c88a4b;
+  border-radius: 0.75rem;
+  background: rgb(200 138 75 / 10%);
+  color: #d4a373;
+  font-size: 0.925rem;
+  line-height: 1.5;
+}
+
+.contact__details {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.contact__details h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: #f5f2ed;
+}
+
+.contact__detail {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.contact__detail-label {
+  color: #c88a4b;
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.contact__detail p,
+.contact__detail a {
+  margin: 0;
+  color: rgb(245 242 237 / 80%);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.contact__detail a:hover {
+  color: #d4a373;
+}
+
+@media (max-width: 760px) {
+  .contact__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact__submit {
+    transition: none;
+  }
+}

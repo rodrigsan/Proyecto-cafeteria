@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  font-family: "Manrope", sans-serif;
+}
+
+.footer {
+  box-sizing: border-box;
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 4vw, 4rem) 1.25rem;
+  background: #14100d;
+  color: #f5f2ed;
+}
+
+.footer__content {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.footer__main {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f5f2ed;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+  font-family: "Playfair Display", "Manrope", serif;
+}
+
+.footer__brand-accent {
+  color: #d4a373;
+}
+
+.footer__tagline {
+  max-width: 18rem;
+  margin: 1rem 0 0;
+  color: rgb(245 242 237 / 65%);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.footer__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.footer__heading {
+  margin: 0 0 0.4rem;
+  color: #f5f2ed;
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.footer__column > a,
+.footer__column > p {
+  margin: 0;
+  color: rgb(245 242 237 / 75%);
+  font-size: 0.925rem;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.footer__column > a:hover,
+.footer__brand:hover {
+  color: #d4a373;
+}
+
+.footer__column > a:focus-visible,
+.footer__brand:focus-visible {
+  border-radius: 0.2rem;
+  outline: 2px solid #d4a373;
+  outline-offset: 4px;
+}
+
+.footer__bottom {
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(245 242 237 / 10%);
+  text-align: center;
+}
+
+.footer__bottom p {
+  margin: 0;
+  color: rgb(245 242 237 / 50%);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 850px) {
+  .footer__main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .footer__main {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__column > a {
+    transition: none;
+  }
+}

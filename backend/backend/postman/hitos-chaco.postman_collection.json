@@ -1,0 +1,314 @@
+{
+  "info": {
+    "_postman_id": "9e928e09-0326-4ea6-96ac-27492e0d7513",
+    "name": "API Hitos Chaco",
+    "description": "Pruebas de contrato y CRUD para /api/hitos-chaco. Crea un registro temporal con un código único y lo elimina durante la ejecución.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000",
+      "type": "string"
+    },
+    {
+      "key": "testRunId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "hitoId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.collectionVariables.get('testRunId')) {",
+          "  pm.collectionVariables.set('testRunId', pm.variables.replaceIn('{{$guid}}'));",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "CRUD Hitos Chaco",
+      "item": [
+        {
+          "name": "Crear hito temporal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo_linea_tiempo\": \"postman-test-{{testRunId}}\",\n  \"titulo\": \"Hito temporal de Postman\",\n  \"fecha\": \"Prueba automatizada\",\n  \"ubicacion\": \"Entorno de pruebas\",\n  \"bajas\": \"No aplica\",\n  \"comandantes\": [\"Prueba Postman\"],\n  \"descripcion\": \"Registro creado y eliminado por la colección de Postman.\",\n  \"texto\": \"Contenido temporal para verificar la persistencia del texto.\",\n  \"foto\": \"/imgs/postman-test.jpg\",\n  \"video\": \"/videos/postman-test.mp4\",\n  \"voz\": \"/voz/postman-test.mp3\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco"
+              ]
+            },
+            "description": "Crea un hito temporal con un código único para esta ejecución."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 201 Created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Devuelve el hito creado con sus campos', function () {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.id).to.be.a('number');",
+                  "  pm.expect(body.codigo_linea_tiempo).to.eql('postman-test-' + pm.collectionVariables.get('testRunId'));",
+                  "  pm.expect(body.titulo).to.eql('Hito temporal de Postman');",
+                  "  pm.expect(body.comandantes).to.eql(['Prueba Postman']);",
+                  "  pm.expect(body.texto).to.be.a('string');",
+                  "  pm.collectionVariables.set('hitoId', String(body.id));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar hitos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco"
+              ]
+            },
+            "description": "Lista todos los hitos en orden ascendente por id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Devuelve una lista que incluye el hito temporal', function () {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.be.an('array');",
+                  "  pm.expect(body.some(function (hito) { return String(hito.id) === pm.collectionVariables.get('hitoId'); })).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener hito temporal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco/{{hitoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco",
+                "{{hitoId}}"
+              ]
+            },
+            "description": "Obtiene el hito creado en el primer paso."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('El id y los datos coinciden con el hito creado', function () {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(String(body.id)).to.eql(pm.collectionVariables.get('hitoId'));",
+                  "  pm.expect(body.codigo_linea_tiempo).to.eql('postman-test-' + pm.collectionVariables.get('testRunId'));",
+                  "  pm.expect(body.comandantes).to.eql(['Prueba Postman']);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actualizar hito temporal",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Hito temporal actualizado por Postman\",\n  \"ubicacion\": \"Entorno de pruebas actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco/{{hitoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco",
+                "{{hitoId}}"
+              ]
+            },
+            "description": "Actualiza el título y la ubicación del hito temporal."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 200 OK', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Devuelve los campos actualizados', function () {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(String(body.id)).to.eql(pm.collectionVariables.get('hitoId'));",
+                  "  pm.expect(body.titulo).to.eql('Hito temporal actualizado por Postman');",
+                  "  pm.expect(body.ubicacion).to.eql('Entorno de pruebas actualizado');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar hito temporal",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco/{{hitoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco",
+                "{{hitoId}}"
+              ]
+            },
+            "description": "Elimina únicamente el registro creado por esta ejecución."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 204 No Content', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "  pm.expect(pm.response.text()).to.eql('');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verificar que el hito eliminado ya no existe",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco/{{hitoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco",
+                "{{hitoId}}"
+              ]
+            },
+            "description": "Comprueba que el endpoint devuelve 404 después del borrado."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 404 para el hito eliminado', function () {",
+                  "  pm.response.to.have.status(404);",
+                  "  pm.expect(pm.response.json().error).to.eql('Hito no encontrado');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rechazar id inválido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/hitos-chaco/id-invalido",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "hitos-chaco",
+                "id-invalido"
+              ]
+            },
+            "description": "Verifica la validación del identificador sin consultar la base de datos."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Responde 400 para un id inválido', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "  pm.expect(pm.response.json().error).to.eql('El id debe ser un entero positivo');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

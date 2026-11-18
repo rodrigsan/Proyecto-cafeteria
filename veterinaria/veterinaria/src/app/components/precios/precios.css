@@ -1,0 +1,186 @@
+:host {
+  display: block;
+  color: #f5f2ed;
+  font-family: "Manrope", sans-serif;
+}
+
+.prices {
+  box-sizing: border-box;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 4rem);
+  background: #14100d;
+}
+
+.prices__content {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.prices__header {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.prices__eyebrow {
+  margin: 0 0 0.6rem;
+  color: #d4a373;
+  font-size: 0.76rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.prices__title {
+  margin: 0;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: #f5f2ed;
+  text-wrap: balance;
+}
+
+.prices__categories {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.prices__category-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.prices__category-title {
+  margin: 0;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #d4a373;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgb(245 242 237 / 8%);
+  position: relative;
+  display: inline-block;
+}
+
+.prices__category-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 3rem;
+  height: 2px;
+  background: #d4a373;
+}
+
+.prices__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.prices__card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  border: 1px solid rgba(212, 163, 115, 0.25);
+  border-radius: 1.5rem;
+  background: #1b1511;
+  transition:
+    border-color 250ms ease,
+    transform 250ms ease,
+    box-shadow 250ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.prices__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.0625rem;
+  background: linear-gradient(90deg, transparent, #d4a373, transparent);
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.prices__card:hover {
+  border-color: #d4a373;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(212, 163, 115, 0.15);
+}
+
+.prices__card:hover::before {
+  opacity: 1;
+}
+
+.prices__card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  border-bottom: 1px dotted rgba(212, 163, 115, 0.4);
+  padding-bottom: 0.75rem;
+}
+
+.prices__card-name {
+  margin: 0;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f5f2ed;
+}
+
+.prices__card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.prices__card-currency {
+  color: #c88a4b;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.prices__card-amount {
+  color: #f5f2ed;
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.prices__card-description {
+  margin: 0.65rem 0 0;
+  color: rgb(245 242 237 / 65%);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .prices__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prices__card {
+    border-radius: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prices__card {
+    transition: none;
+  }
+
+  .prices__card::before {
+    transition: none;
+  }
+}

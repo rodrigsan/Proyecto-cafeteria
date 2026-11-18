@@ -1,0 +1,32 @@
+<section class="prices" id="precios" aria-labelledby="prices-title" appReveal>
+  <div class="prices__content">
+    <header class="prices__header">
+      <p class="prices__eyebrow">Catálogo</p>
+      <h2 class="prices__title" id="prices-title">Precios</h2>
+    </header>
+
+    <div class="prices__categories">
+      @for (categoria of categorias(); track categoria) {
+        <section class="prices__category-section">
+          <h3 class="prices__category-title">{{ categoria }}</h3>
+          <div class="prices__grid">
+            @for (item of (preciosPorCategoria()?.get(categoria) || []); track item.id) {
+              <article class="prices__card">
+                <div class="prices__card-header">
+                  <h4 class="prices__card-name">{{ item.nombre }}</h4>
+                  <span class="prices__card-price">
+                    <span class="prices__card-currency">Bs.</span>
+                    <span class="prices__card-amount">{{ item.precio.toFixed(2) }}</span>
+                  </span>
+                </div>
+                @if (item.descripcion) {
+                  <p class="prices__card-description">{{ item.descripcion }}</p>
+                }
+              </article>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  </div>
+</section>

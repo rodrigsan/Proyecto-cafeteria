@@ -1,0 +1,31 @@
+<nav class="navbar" aria-label="Navegación principal">
+  <a class="navbar__brand" href="#inicio" aria-label="CoffeeHouse, inicio" (click)="closeMenu()">
+    <span class="navbar__brand-text">Coffee<span class="navbar__brand-accent">House</span></span>
+  </a>
+
+  <button
+    class="navbar__toggle"
+    type="button"
+    [attr.aria-expanded]="menuOpen()"
+    aria-controls="navbar-links"
+    [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+    (click)="toggleMenu()"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div
+    class="navbar__links"
+    id="navbar-links"
+    [class.navbar__links--open]="menuOpen()"
+  >
+    <a href="#inicio" (click)="closeMenu()">Inicio</a>
+    <a href="#servicios" (click)="closeMenu()">Servicios</a>
+    <a href="#especialidades" (click)="closeMenu()">Especialidades</a>
+    <a href="#nosotros" (click)="closeMenu()">Nosotros</a>
+    <a href="#precios" (click)="closeMenu()">Precios</a>
+    <a href="#contacto" (click)="closeMenu()">Contacto</a>
+  </div>
+</nav>

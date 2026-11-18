@@ -1,0 +1,20 @@
+<section class="services" id="servicios" aria-labelledby="services-title" appReveal>
+  <div class="services__content">
+    <header class="services__header">
+      <p class="services__eyebrow">Nuestros servicios</p>
+      <h2 class="services__title" id="services-title">Servicios</h2>
+    </header>
+
+    <div class="services__grid">
+      @for (servicio of servicios(); track servicio.id; let index = $index) {
+        <article class="service-card" [style.transition-delay.ms]="index * 80">
+          <div class="service-card__image" aria-hidden="true">
+            <img [src]="servicio.imagen" [alt]="servicio.nombre" loading="lazy" />
+          </div>
+          <h3 class="service-card__name">{{ servicio.nombre }}</h3>
+          <p class="service-card__description">{{ servicio.descripcion }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>

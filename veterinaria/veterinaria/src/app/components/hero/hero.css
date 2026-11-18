@@ -1,0 +1,136 @@
+:host {
+  display: block;
+  color: #f5f2ed;
+  font-family: "Manrope", sans-serif;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #14100d;
+}
+
+.hero__video,
+.hero__overlay {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__video {
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__overlay {
+  background:
+    linear-gradient(180deg, rgba(20, 16, 13, 0.35) 0%, rgba(20, 16, 13, 0.85) 100%),
+    linear-gradient(0deg, rgba(20, 16, 13, 0.9) 0%, rgba(20, 16, 13, 0.3) 60%);
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 5rem);
+  text-align: left;
+}
+
+.hero__location {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #d4a373;
+}
+
+.hero__title {
+  margin: 0;
+  max-width: 900px;
+  font-family: "Playfair Display", "Manrope", serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: #f5f2ed;
+  text-wrap: balance;
+}
+
+.hero__subtitle {
+  margin: 0;
+  max-width: 600px;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgb(245 242 237 / 80%);
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.2rem;
+  padding: 0 1.75rem;
+  border: 1px solid #d4a373;
+  border-radius: 999px;
+  background: transparent;
+  color: #d4a373;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.hero__cta:hover,
+.hero__cta:focus-visible {
+  background: #d4a373;
+  color: #14100d;
+  transform: translateY(-2px);
+}
+
+.hero__cta:focus-visible {
+  outline: 3px solid #d4a373;
+  outline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .hero__content {
+    padding: 2rem 1.25rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero__title {
+    font-size: clamp(2.5rem, 10vw, 4.5rem);
+    text-align: center;
+  }
+
+  .hero__subtitle {
+    text-align: center;
+  }
+
+  .hero__cta {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__cta {
+    transition: none;
+  }
+}

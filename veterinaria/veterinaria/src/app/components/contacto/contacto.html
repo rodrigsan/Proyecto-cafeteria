@@ -1,0 +1,122 @@
+<section class="contact" id="contacto" aria-labelledby="contact-title" appReveal>
+  <div class="contact__container">
+    <header class="contact__header">
+      <p class="contact__eyebrow">Contáctanos</p>
+      <h2 class="contact__title" id="contact-title">Escríbenos</h2>
+      @if (nosotros(); as datos) {
+        <p class="contact__intro">
+          {{ datos.direccion }} · Tel: {{ datos.telefono }} · {{ datos.correo }}
+        </p>
+      }
+    </header>
+
+    <div class="contact__layout">
+      <form
+        class="contact__form"
+        [formGroup]="contactoForm"
+        (ngSubmit)="enviar()"
+        novalidate
+      >
+        <div class="contact__field">
+          <label for="contact-name">Nombre</label>
+          <input
+            id="contact-name"
+            type="text"
+            formControlName="nombre"
+            autocomplete="name"
+            placeholder="Tu nombre"
+            [attr.aria-invalid]="contactoForm.controls.nombre.touched && contactoForm.controls.nombre.invalid"
+            aria-describedby="contact-name-error"
+          />
+          @if (contactoForm.controls.nombre.touched && contactoForm.controls.nombre.hasError('required')) {
+            <p class="contact__error" id="contact-name-error">Escribe tu nombre.</p>
+          }
+        </div>
+
+        <div class="contact__field">
+          <label for="contact-email">Correo electrónico</label>
+          <input
+            id="contact-email"
+            type="email"
+            formControlName="correo"
+            autocomplete="email"
+            placeholder="tu@correo.com"
+            [attr.aria-invalid]="contactoForm.controls.correo.touched && contactoForm.controls.correo.invalid"
+            aria-describedby="contact-email-error"
+          />
+          @if (contactoForm.controls.correo.touched && contactoForm.controls.correo.hasError('required')) {
+            <p class="contact__error" id="contact-email-error">Escribe tu correo electrónico.</p>
+          } @else if (contactoForm.controls.correo.touched && contactoForm.controls.correo.hasError('email')) {
+            <p class="contact__error" id="contact-email-error">Ingresa un correo válido.</p>
+          }
+        </div>
+
+        <div class="contact__field">
+          <label for="contact-phone">Teléfono</label>
+          <input
+            id="contact-phone"
+            type="tel"
+            formControlName="telefono"
+            autocomplete="tel"
+            placeholder="+591 4 1234567"
+          />
+        </div>
+
+        <div class="contact__field">
+          <label for="contact-message">Mensaje</label>
+          <textarea
+            id="contact-message"
+            rows="5"
+            formControlName="mensaje"
+            placeholder="Cuéntanos cómo podemos ayudarte"
+            [attr.aria-invalid]="contactoForm.controls.mensaje.touched && contactoForm.controls.mensaje.invalid"
+            aria-describedby="contact-message-error"
+          ></textarea>
+          @if (contactoForm.controls.mensaje.touched && contactoForm.controls.mensaje.hasError('required')) {
+            <p class="contact__error" id="contact-message-error">Escribe tu mensaje.</p>
+          } @else if (contactoForm.controls.mensaje.touched && contactoForm.controls.mensaje.hasError('minlength')) {
+            <p class="contact__error" id="contact-message-error">El mensaje debe tener al menos 10 caracteres.</p>
+          }
+        </div>
+
+        <button class="contact__submit" type="submit" [disabled]="contactoForm.invalid || cargando()">
+          @if (cargando()) { Enviando... } @else { Enviar mensaje }
+          <span aria-hidden="true">→</span>
+        </button>
+
+        @if (error()) {
+          <p class="contact__error" role="alert">{{ error() }}</p>
+        }
+        @if (enviado()) {
+          <p class="contact__success" role="status" aria-live="polite">
+            ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.
+          </p>
+        }
+      </form>
+
+      <aside class="contact__details" aria-label="Datos de contacto">
+        <h3>También puedes encontrarnos aquí</h3>
+        @if (nosotros(); as datos) {
+          <div class="contact__detail">
+            <span class="contact__detail-label">Dirección</span>
+            <p>{{ datos.direccion }}</p>
+          </div>
+          <div class="contact__detail">
+            <span class="contact__detail-label">Teléfono</span>
+            <a [href]="'tel:' + datos.telefono">{{ datos.telefono }}</a>
+          </div>
+          <div class="contact__detail">
+            <span class="contact__detail-label">Correo electrónico</span>
+            <a [href]="'mailto:' + datos.correo">{{ datos.correo }}</a>
+          </div>
+          <div class="contact__detail">
+            <span class="contact__detail-label">Horarios</span>
+            <p>Lunes a viernes: {{ datos.horarios.lunesAViernes }}</p>
+            <p>Sábado: {{ datos.horarios.sabado }}</p>
+            <p>Domingo: {{ datos.horarios.domingo }}</p>
+          </div>
+        }
+      </aside>
+    </div>
+  </div>
+</section>

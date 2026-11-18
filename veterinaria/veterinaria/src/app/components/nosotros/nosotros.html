@@ -1,0 +1,60 @@
+<section class="nosotros" id="nosotros" aria-labelledby="nosotros-title" appReveal>
+  <div class="nosotros__content">
+    <div class="nosotros__grid">
+      <div class="nosotros__text">
+        <header class="nosotros__header">
+          <p class="nosotros__eyebrow">Nosotros</p>
+          <h2 class="nosotros__title" id="nosotros-title">Nuestra historia</h2>
+        </header>
+        <p class="nosotros__description">{{ nosotros()?.historia || '' }}</p>
+
+        <div class="nosotros__contact">
+          <article class="nosotros__item">
+            <span class="nosotros__item-label">Dirección</span>
+            <span class="nosotros__item-value">{{ nosotros()?.direccion || '' }}</span>
+          </article>
+          <article class="nosotros__item">
+            <span class="nosotros__item-label">Teléfono</span>
+            <a class="nosotros__item-value" [href]="'tel:' + nosotros()?.telefono">{{ nosotros()?.telefono || '' }}</a>
+          </article>
+          <article class="nosotros__item">
+            <span class="nosotros__item-label">Correo</span>
+            <a class="nosotros__item-value" [href]="'mailto:' + nosotros()?.correo">{{ nosotros()?.correo || '' }}</a>
+          </article>
+        </div>
+
+        <div class="nosotros__horarios">
+          <h3 class="nosotros__horarios-title">Horarios de atención</h3>
+          <dl class="nosotros__horarios-list">
+            <div class="nosotros__horario-item">
+              <dt>Lunes a viernes</dt>
+              <dd>{{ nosotros()?.horarios.lunesAViernes || '' }}</dd>
+            </div>
+            <div class="nosotros__horario-item">
+              <dt>Sábado</dt>
+              <dd>{{ nosotros()?.horarios.sabado || '' }}</dd>
+            </div>
+            <div class="nosotros__horario-item">
+              <dt>Domingo</dt>
+              <dd>{{ nosotros()?.horarios.domingo || '' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="nosotros__gallery">
+        <h3 class="nosotros__gallery-title">Galería de la tienda</h3>
+        <div class="nosotros__gallery-grid">
+          @for (foto of galeria(); track foto.id; let index = $index) {
+            <figure class="nosotros__gallery-item" [style.transition-delay.ms]="index * 60">
+              <img [src]="foto.imagen" [alt]="foto.descripcion || 'Foto de CoffeeHouse'" loading="lazy" />
+              @if (foto.descripcion) {
+                <figcaption class="nosotros__gallery-caption">{{ foto.descripcion }}</figcaption>
+              }
+            </figure>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

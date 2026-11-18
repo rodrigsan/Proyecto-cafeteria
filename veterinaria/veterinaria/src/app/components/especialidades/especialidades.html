@@ -1,0 +1,29 @@
+<section class="especialidades" id="especialidades" aria-labelledby="especialidades-title" appReveal>
+  <div class="especialidades__content">
+    <header class="especialidades__header">
+      <p class="especialidades__eyebrow">Especialidades de la casa</p>
+      <h2 class="especialidades__title" id="especialidades-title">Cafés estrella</h2>
+    </header>
+
+    <div class="especialidades__grid">
+      @for (especialidad of especialidades(); track especialidad.id; let index = $index) {
+        <article
+          class="especialidad-card"
+          [class.especialidad-card--destacado]="especialidad.destacado === 1"
+          [style.transition-delay.ms]="index * 80"
+        >
+          <div class="especialidad-card__image" aria-hidden="true">
+            <img [src]="especialidad.imagen" [alt]="especialidad.nombre" loading="lazy" />
+            @if (especialidad.destacado === 1) {
+              <span class="especialidad-card__badge">Destacado</span>
+            }
+          </div>
+          <div class="especialidad-card__content">
+            <h3 class="especialidad-card__name">{{ especialidad.nombre }}</h3>
+            <p class="especialidad-card__description">{{ especialidad.descripcion }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
