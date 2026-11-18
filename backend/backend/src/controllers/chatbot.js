@@ -1,45 +1,12 @@
-const CONTEXTO_COFFEEHOUSE = `
-Eres el asistente virtual de soporte de "CoffeeHouse", una cafetería premium ubicada en Cochabamba, Bolivia.
-Tu función es responder preguntas de los clientes sobre la cafetería, su menú, precios, servicios, ubicación y horarios.
-
-INFORMACIÓN DE COFFEEHOUSE:
-- Nombre: CoffeeHouse
-- Ubicación: Av. Heroínas esq. San Martín, zona Centro, Cochabamba, Bolivia
-- Teléfono: +591 4 4256789
-- Correo: hola@coffeehouse.bo
-- Horarios: Lunes a viernes de 07:30 a 20:00, Sábado de 08:00 a 19:00, Domingo de 09:00 a 18:00
-
-MENÚ Y PRECIOS (en Bs. - bolivianos):
-Bebidas Calientes: Espresso Bs 12.00, Americano Bs 14.00, Cappuccino Bs 18.00, Latte Bs 20.00, Mocaccino Bs 22.00
-Bebidas Frías: Café frappé Bs 20.00, Cold brew Bs 18.00, Té helado Bs 12.00, Latte helado vainilla Bs 22.00
-Especialidades: Café de altura Cochabamba Bs 16.00, Affogato Bs 24.00
-Repostería: Tiramisú clásico Bs 28.00, Cheesecake de frutos rojos Bs 26.00, Brownie de chocolate Bs 20.00
-
-SERVICIOS:
-- Café de especialidad: granos seleccionados preparados por baristas
-- Desayunos y brunch: tostadas, avena, huevos y jugos naturales
-- Repostería artesanal: dulces, tortas y galletas hechas en casa
-- Espacio de trabajo remoto: Wi-Fi, enchufes y ambiente tranquilo
-- Eventos privados: reuniones, cumpleaños y encuentros de trabajo
-
-ESPECIALIDADES DE LA CASA:
-- Café de altura Cochabamba: cultivo en valles cochabambinos, notas cítricas
-- Espresso doble: extracción intensa y equilibrada
-- Cappuccino italiano: leche vaporizada y espuma cremosa con cacao
-- Latte vainilla: espresso con leche y jarabe de vainilla natural
-- Tiramisú clásico: postre italiano con mascarpone y cacao
-
-REGLAS:
-- Responde siempre en español, con claridad, respeto y calidez.
-- No inventes precios, productos ni servicios que no estén en la información anterior.
-- Si el cliente pregunta sobre algo que no está en esta información, indica amablemente que puedes ayudarle con lo relacionado a CoffeeHouse y sugiere que contacten directamente al teléfono o correo.
-- Sé breve y directo en tus respuestas.
-`;
+const preciosModel = require("../models/precios");
+const especialidadesModel = require("../models/especialidades");
+const serviciosModel = require("../models/servicios");
+const nosotrosModel = require("../models/nosotros");
 
 const OLLAMA_URL = (
   process.env.OLLAMA_URL || "http://127.0.0.1:11434"
 ).replace(/\/+$/, "");
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "gemma3";
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "gemma3:1b";
 const OLLAMA_TIMEOUT_MS = 60000;
 const MAX_PROMPT_LENGTH = 4000;
 
@@ -49,26 +16,101 @@ function httpError(status, message) {
   return error;
 }
 
-const RESPUESTA_RESPALDO = `
+async function obtenerDatosDinamicos() {
+  const [precios, especialidades, servicios, nosotros] = await Promise.all([
+    preciosModel.findAll(),
+    especialidadesModel.findAll(),
+    serviciosModel.findAll(),
+    nosotrosModel.findOne(),
+  ]);
+
+  const preciosPorCategoria = {};
+  for (const p of precios) {
+    if (!preciosPorCategoria[p.categoria]) {
+      preciosPorCategoria[p.categoria] = [];
+    }
+    preciosPorCategoria[p.categoria].push(p);
+  }
+
+  let textoPrecios = "";
+  for (const [categoria, items] of Object.entries(preciosPorCategoria)) {
+    textoPrecios += `\n${categoria}:`;
+    for (const item of items) {
+      textoPrecios += `\n- ${item.nombre}: Bs. ${Number(item.precio).toFixed(2)}`;
+    }
+  }
+
+  let textoEspecialidades = "";
+  for (const e of especialidades) {
+    textoEspecialidades += `\n- ${e.nombre}: ${e.descripcion}`;
+  }
+
+  let textoServicios = "";
+  for (const s of servicios) {
+    textoServicios += `\n- ${s.nombre}: ${s.descripcion}`;
+  }
+
+  const horarios = nosotros?.horarios || {};
+  const textoHorarios = `
+- Lunes a viernes: ${horarios.lunesAViernes || "No disponible"}
+- Sábado: ${horarios.sabado || "No disponible"}
+- Domingo: ${horarios.domingo || "No disponible"}
+`;
+
+  return {
+    textoPrecios,
+    textoEspecialidades,
+    textoServicios,
+    direccion: nosotros?.direccion || "No disponible",
+    telefono: nosotros?.telefono || "No disponible",
+    correo: nosotros?.correo || "No disponible",
+    textoHorarios,
+  };
+}
+
+function construirContexto(datos) {
+  return `
+Eres el asistente virtual de soporte de "CoffeeHouse", una cafetería premium ubicada en Cochabamba, Bolivia.
+Tu función es responder preguntas de los clientes sobre la cafetería, su menú, precios, servicios, ubicación y horarios.
+
+INFORMACIÓN DE COFFEEHOUSE (actualizada en tiempo real desde la base de datos):
+- Nombre: CoffeeHouse
+- Ubicación: ${datos.direccion}
+- Teléfono: ${datos.telefono}
+- Correo: ${datos.correo}
+
+HORARIOS DE ATENCIÓN:${datos.textoHorarios}
+
+MENÚ Y PRECIOS (en Bs. - bolivianos):${datos.textoPrecios}
+
+SERVICIOS:${datos.textoServicios}
+
+ESPECIALIDADES DE LA CASA:${datos.textoEspecialidades}
+
+REGLAS:
+- Responde siempre en español, con claridad, respeto y calidez.
+- Usa EXCLUSIVAMENTE los precios, productos y servicios listados arriba, que provienen de la base de datos actual.
+- No inventes precios, productos ni servicios que no estén en la información anterior.
+- Si el cliente pregunta sobre algo que no está en esta información, indica amablemente que puedes ayudarle con lo relacionado a CoffeeHouse y sugiere que contacten directamente al teléfono o correo.
+- Sé breve y directo en tus respuestas.
+`;
+}
+
+function construirRespuestaRespaldo(datos) {
+  return `
 Hola! Soy el asistente virtual de CoffeeHouse, tu cafetería de especialidad en Cochabamba, Bolivia.
 
-📍 Ubicación: Av. Heroínas esq. San Martín, zona Centro, Cochabamba, Bolivia
-📞 Teléfono: +591 4 4256789
-✉️ Correo: hola@coffeehouse.bo
+📍 Ubicación: ${datos.direccion}
+📞 Teléfono: ${datos.telefono}
+✉️ Correo: ${datos.correo}
 
-🕒 Horarios:
-- Lunes a viernes: 07:30 – 20:00
-- Sábado: 08:00 – 19:00
-- Domingo: 09:00 – 18:00
+🕒 Horarios:${datos.textoHorarios}
 
-☕ Nuestros precios (en Bs.):
-Bebidas Calientes: Espresso Bs 12.00, Americano Bs 14.00, Cappuccino Bs 18.00, Latte Bs 20.00, Mocaccino Bs 22.00
-Bebidas Frías: Café frappé Bs 20.00, Cold brew Bs 18.00, Té helado Bs 12.00, Latte helado vainilla Bs 22.00
-Especialidades: Café de altura Cochabamba Bs 16.00, Affogato Bs 24.00
-Repostería: Tiramisú clásico Bs 28.00, Cheesecake de frutos rojos Bs 26.00, Brownie de chocolate Bs 20.00
+☕ Nuestros precios (en Bs.):${datos.textoPrecios}
 
 Si necesitas más información, contáctanos directamente. ¡Que tengas un excelente día!
 `;
+}
 
 async function prompt(req, res) {
   const { prompt: questionPrompt, mensaje } = req.body;
@@ -85,6 +127,25 @@ async function prompt(req, res) {
     );
   }
 
+  let datos;
+  try {
+    datos = await obtenerDatosDinamicos();
+  } catch (error) {
+    console.error("Error consultando base de datos:", error.message);
+    datos = {
+      textoPrecios: "",
+      textoEspecialidades: "",
+      textoServicios: "",
+      direccion: "No disponible",
+      telefono: "No disponible",
+      correo: "No disponible",
+      textoHorarios: "\n- Lunes a viernes: No disponible\n- Sábado: No disponible\n- Domingo: No disponible",
+    };
+  }
+
+  const contexto = construirContexto(datos);
+  const respuestaRespaldo = construirRespuestaRespaldo(datos);
+
   const controller = new AbortController();
   let timedOut = false;
   const timeout = setTimeout(() => {
@@ -98,9 +159,10 @@ async function prompt(req, res) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         model: OLLAMA_MODEL,
-        system: CONTEXTO_COFFEEHOUSE,
+        system: contexto,
         prompt: question.trim(),
         stream: false,
+        options: { temperature: 0.1 },
       }),
       signal: controller.signal,
     });
@@ -117,10 +179,10 @@ async function prompt(req, res) {
     res.json({ response: data.response.trim() });
   } catch (error) {
     if (timedOut) {
-      res.json({ response: RESPUESTA_RESPALDO.trim() });
+      res.json({ response: respuestaRespaldo.trim() });
       return;
     }
-    res.json({ response: RESPUESTA_RESPALDO.trim() });
+    res.json({ response: respuestaRespaldo.trim() });
   } finally {
     clearTimeout(timeout);
   }
